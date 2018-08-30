@@ -3,6 +3,8 @@ import tkFileDialog
 import tkMessageBox
 import Tkinter as tk
 
+from src.main.MonthIndexFrame import MonthIndexFrame
+
 
 class HomeWindow(tk.Frame):
 
@@ -23,6 +25,10 @@ class HomeWindow(tk.Frame):
         filemenu.add_command(label="Exit", command=self.exit)
         menubar.add_cascade(label="File", menu=filemenu)
 
+        processingmenu = tk.Menu(menubar, tearoff=0)
+        processingmenu.add_command(label="Month Index", command=self.monthindex)
+        menubar.add_cascade(label="Processing", menu=processingmenu)
+
         helpmenu = tk.Menu(menubar, tearoff=0)
         helpmenu.add_command(label="About", command=self.about)
         menubar.add_cascade(label="Help", menu=helpmenu)
@@ -31,15 +37,18 @@ class HomeWindow(tk.Frame):
         exit()
 
     def open(self):
-        inputfilepath = tkFileDialog.askopenfilename(initialdir="/", title="Select File",filetypes=(("GZ Files", "*.gz"), ("All Files", "*.*")))
-
-        print ("inputfilepath: "+inputfilepath);
+        print ("Open Menu Item Pressed!")
 
     def about(self):
         tkMessageBox.showinfo("AGPS",
                               "Automated GRACE Processing System."
                               "AGPS Version 0.1")
 
+    def monthindex(self):
+        root = tk.Tk()
+        root.geometry("600x250")
+        app = MonthIndexFrame(root)
+        root.mainloop()
 
 if __name__ == "__main__":
     root = tk.Tk()
