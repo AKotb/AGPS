@@ -50,6 +50,7 @@ class HomeWindow(tk.Frame):
         app = MonthIndexFrame(root)
         root.mainloop()
 
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("600x400+100+100")
