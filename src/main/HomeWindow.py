@@ -1,9 +1,9 @@
 import sys
-import tkFileDialog
 import tkMessageBox
 import Tkinter as tk
 
 from src.main.MonthIndexFrame import MonthIndexFrame
+from src.main.TemporalMeanFrame import TemporalMeanFrame
 
 
 class HomeWindow(tk.Frame):
@@ -27,6 +27,7 @@ class HomeWindow(tk.Frame):
 
         processingmenu = tk.Menu(menubar, tearoff=0)
         processingmenu.add_command(label="Month Index", command=self.monthindex)
+        processingmenu.add_command(label="Temporal Mean", command=self.temporalmean)
         menubar.add_cascade(label="Processing", menu=processingmenu)
 
         helpmenu = tk.Menu(menubar, tearoff=0)
@@ -50,10 +51,16 @@ class HomeWindow(tk.Frame):
         app = MonthIndexFrame(root)
         root.mainloop()
 
+    def temporalmean(self):
+        root = tk.Tk()
+        root.geometry("600x250")
+        app = TemporalMeanFrame(root)
+        root.mainloop()
+
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.geometry("600x400+100+100")
+    root.geometry("500x20+50+50")
     root.overrideredirect(0)
     root.config(bg="blue")
     app = HomeWindow(root)
