@@ -50,6 +50,13 @@ class TemporalMeanFrame(tk.Frame):
         self.cancelbtn.config(state="disabled")
         self.startcalculatingtemporalmeanbtn.config(state="disabled")
 
+        # Creating clm_all & slm_all container (degree x order x num_of_files)
+        grace_base = 60  # grace base either 60 or 96
+        max_files = 200  # maximum number of files used expected
+        clm_all = np.zeros(dtype='f', shape=[grace_base + 1, grace_base + 1, max_files])
+        slm_all = np.zeros(dtype='f', shape=[grace_base + 1, grace_base + 1, max_files])
+        index = -1
+        filenames = []
         if not os.path.exists(self.inputfilespath+'/raw/'):
             os.makedirs(self.inputfilespath+'/raw/')
 
@@ -70,6 +77,7 @@ class TemporalMeanFrame(tk.Frame):
             if ".gz" in x:
                 try:
                     filename = x.split('.')[0]  # File Name without extension
+                    filenames.append(filename)
                     with gzip.open(self.inputfilespath+'/'+x, 'rb') as f:
                         file_content = f.read()
                     o = open(self.inputfilespath+'/raw/'+filename+'.txt', 'w')
@@ -83,13 +91,6 @@ class TemporalMeanFrame(tk.Frame):
                 print("File " + x + " is not a .gz file")
                 continue
 
-        # Creating clm_all & slm_all container (degree x order x num_of_files)
-        grace_base = 60  # grace base either 60 or 96
-        max_files = 200  # maximum number of files used expected
-        clm_all = np.zeros(dtype='f', shape=[grace_base + 1, grace_base + 1, max_files])
-        slm_all = np.zeros(dtype='f', shape=[grace_base + 1, grace_base + 1, max_files])
-
-        index = -1
         for x in self.files:
             # print x[6:26]
             if ".gz" in x:
@@ -142,6 +143,21 @@ class TemporalMeanFrame(tk.Frame):
                 worksheet.write(count, 3, slm_mean[xx, yy])
                 count += 1
 
+        for i in range(index+1):
+            try:
+                o = open(self.inputfilespath + '/processed/' + "filtered.month." + str(i).zfill(3) + '.txt', 'w')
+                #o = open(self.inputfilespath + '/processed/' + filenames[i] + '.txt', 'w')
+                for xx in range(0, grace_base + 1):
+                    for yy in range(0, xx + 1):
+                        o.write('{0:6d}'.format(xx) + "  " + '{0:6d}'.format(yy) + "    " + ('%.8E' % clm_cleaned[xx, yy, i]) + "  " + ('%.8E' % slm_cleaned[xx, yy, i]) + "\n")
+                o.close()
+            except Exception as e:
+                print(e)
+                print "Could not read " + x
+                continue
+        #########################################
+
+        #########################################
 
         self.opentemporalmeanbtn.config(state="active")
         self.cancelbtn.config(state="active")
