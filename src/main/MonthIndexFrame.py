@@ -1,6 +1,7 @@
+import Tkinter as tk
 import os
 import tkFileDialog
-import Tkinter as tk
+
 import xlsxwriter
 
 

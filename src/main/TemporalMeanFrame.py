@@ -1,7 +1,8 @@
-import os
-import tkFileDialog
 import Tkinter as tk
 import gzip
+import os
+import tkFileDialog
+
 import numpy as np
 import xlsxwriter
 
@@ -57,17 +58,17 @@ class TemporalMeanFrame(tk.Frame):
         slm_all = np.zeros(dtype='f', shape=[grace_base + 1, grace_base + 1, max_files])
         index = -1
         filenames = []
-        if not os.path.exists(self.inputfilespath+'/raw/'):
-            os.makedirs(self.inputfilespath+'/raw/')
+        if not os.path.exists(self.inputfilespath + '/raw/'):
+            os.makedirs(self.inputfilespath + '/raw/')
 
-        if not os.path.exists(self.inputfilespath+'/processed/'):
-            os.makedirs(self.inputfilespath+'/processed/')
+        if not os.path.exists(self.inputfilespath + '/processed/'):
+            os.makedirs(self.inputfilespath + '/processed/')
 
         workbook = xlsxwriter.Workbook(self.inputfilespath + '/raw/' + 'GRACE Raw Data.xlsx')
         worksheet = workbook.add_worksheet()
         # Header
-        #worksheet.write(0, 0, 'Coefficient')
-        #worksheet.write(0, 1, 'Degree')
+        # worksheet.write(0, 0, 'Coefficient')
+        # worksheet.write(0, 1, 'Degree')
         worksheet.write(0, 0, 'Order')
         worksheet.write(0, 1, 'Degree')
         worksheet.write(0, 2, 'Clm Mean')
@@ -78,9 +79,9 @@ class TemporalMeanFrame(tk.Frame):
                 try:
                     filename = x.split('.')[0]  # File Name without extension
                     filenames.append(filename)
-                    with gzip.open(self.inputfilespath+'/'+x, 'rb') as f:
+                    with gzip.open(self.inputfilespath + '/' + x, 'rb') as f:
                         file_content = f.read()
-                    o = open(self.inputfilespath+'/raw/'+filename+'.txt', 'w')
+                    o = open(self.inputfilespath + '/raw/' + filename + '.txt', 'w')
                     o.write(file_content)
                     o.close()
                 except Exception as e:
@@ -115,13 +116,13 @@ class TemporalMeanFrame(tk.Frame):
                     print "Could not open " + x
                     continue
 
-        print index # counter for num of files processed
+        print index  # counter for num of files processed
         print clm_all.shape
         print slm_all.shape
         # delete all empty layers (more than 163 will be deleted)
         # clm & slm are filled, num of layers = index
-        clm_all = clm_all[:, :, 0:index+1]
-        slm_all = slm_all[:, :, 0:index+1]
+        clm_all = clm_all[:, :, 0:index + 1]
+        slm_all = slm_all[:, :, 0:index + 1]
         # calculate mean for clm and slm
         clm_mean = np.mean(clm_all, axis=2)
         slm_mean = np.mean(slm_all, axis=2)
@@ -129,27 +130,29 @@ class TemporalMeanFrame(tk.Frame):
         clm_cleaned = np.zeros(dtype='f', shape=[grace_base + 1, grace_base + 1, index + 1])
         slm_cleaned = np.zeros(dtype='f', shape=[grace_base + 1, grace_base + 1, index + 1])
 
-        for layer in range(index+1):
+        for layer in range(index + 1):
             clm_cleaned[:, :, layer] = clm_all[:, :, layer] - clm_mean
             slm_cleaned[:, :, layer] = slm_all[:, :, layer] - slm_mean
 
         count = 1
         for xx in range(0, grace_base + 1):
             for yy in range(0, xx + 1):
-                #print "[" + str(xx) + ", " + str(yy) + "]"
+                # print "[" + str(xx) + ", " + str(yy) + "]"
                 worksheet.write(count, 0, xx)
                 worksheet.write(count, 1, yy)
                 worksheet.write(count, 2, clm_mean[xx, yy])
                 worksheet.write(count, 3, slm_mean[xx, yy])
                 count += 1
+        workbook.close()
 
-        for i in range(index+1):
+        for i in range(index + 1):
             try:
                 o = open(self.inputfilespath + '/processed/' + "filtered.month." + str(i).zfill(3) + '.txt', 'w')
-                #o = open(self.inputfilespath + '/processed/' + filenames[i] + '.txt', 'w')
+                # o = open(self.inputfilespath + '/processed/' + filenames[i] + '.txt', 'w')
                 for xx in range(0, grace_base + 1):
                     for yy in range(0, xx + 1):
-                        o.write('{0:6d}'.format(xx) + "  " + '{0:6d}'.format(yy) + "    " + ('%.8E' % clm_cleaned[xx, yy, i]) + "  " + ('%.8E' % slm_cleaned[xx, yy, i]) + "\n")
+                        o.write('{0:6d}'.format(xx) + "  " + '{0:6d}'.format(yy) + "    " + (
+                                    '%.8E' % clm_cleaned[xx, yy, i]) + "  " + ('%.8E' % slm_cleaned[xx, yy, i]) + "\n")
                 o.close()
             except Exception as e:
                 print(e)
@@ -165,4 +168,4 @@ class TemporalMeanFrame(tk.Frame):
     def opentemporalmean(self):
         os.chdir(self.inputfilespath)
         os.system('start excel.exe "%s/raw/GRACE Raw Data.xlsx"' % (self.inputfilespath,))
-        #os.system('start excel.exe "%s\\MonthIndex.xlsx"' % (self.inputfilespath,))
+        # os.system('start excel.exe "%s\\MonthIndex.xlsx"' % (self.inputfilespath,))

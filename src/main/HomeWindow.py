@@ -1,6 +1,6 @@
+import Tkinter as tk
 import sys
 import tkMessageBox
-import Tkinter as tk
 
 from src.main.MonthIndexFrame import MonthIndexFrame
 from src.main.TemporalMeanFrame import TemporalMeanFrame
