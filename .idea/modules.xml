@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AGPS.iml" filepath="$PROJECT_DIR$/.idea/AGPS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../ConvertShptoJSON/.idea/ConvertShptoJSON.iml" filepath="$PROJECT_DIR$/../ConvertShptoJSON/.idea/ConvertShptoJSON.iml" />
     </modules>
   </component>
 </project>

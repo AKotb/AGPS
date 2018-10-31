@@ -3,6 +3,7 @@ import sys
 import tkMessageBox
 
 from src.main.MonthIndexFrame import MonthIndexFrame
+from src.main.TWSMassAnomaliesCalculator import TWSMassAnomaliesCalculator
 from src.main.TemporalMeanFrame import TemporalMeanFrame
 
 
@@ -28,6 +29,7 @@ class HomeWindow(tk.Frame):
         processingmenu = tk.Menu(menubar, tearoff=0)
         processingmenu.add_command(label="Month Index", command=self.monthindex)
         processingmenu.add_command(label="Temporal Mean", command=self.temporalmean)
+        processingmenu.add_command(label="Calculate TWS Mass Anomalies", command=self.twsmassanomalies)
         menubar.add_cascade(label="Processing", menu=processingmenu)
 
         helpmenu = tk.Menu(menubar, tearoff=0)
@@ -55,6 +57,12 @@ class HomeWindow(tk.Frame):
         root = tk.Tk()
         root.geometry("600x250")
         app = TemporalMeanFrame(root)
+        root.mainloop()
+
+    def twsmassanomalies(self):
+        root = tk.Tk()
+        root.geometry("600x300")
+        app = TWSMassAnomaliesCalculator(root)
         root.mainloop()
 
 

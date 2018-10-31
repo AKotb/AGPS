@@ -4,7 +4,8 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 2.7 (AGPS)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 2.7.14 (C:\Users\ahmed.kotb\AppData\Local\Continuum\anaconda2\python.exe)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="ConvertShptoJSON" />
   </component>
 </module>
