@@ -4,6 +4,7 @@ import tkMessageBox
 
 from src.main.MonthIndexFrame import MonthIndexFrame
 from src.main.TWSMassAnomaliesCalculator import TWSMassAnomaliesCalculator
+from src.main.TWStoTiff import TWStoTiff
 from src.main.TemporalMeanFrame import TemporalMeanFrame
 
 
@@ -30,6 +31,7 @@ class HomeWindow(tk.Frame):
         processingmenu.add_command(label="Month Index", command=self.monthindex)
         processingmenu.add_command(label="Temporal Mean", command=self.temporalmean)
         processingmenu.add_command(label="Calculate TWS Mass Anomalies", command=self.twsmassanomalies)
+        processingmenu.add_command(label="Create TIFF", command=self.createtiff)
         menubar.add_cascade(label="Processing", menu=processingmenu)
 
         helpmenu = tk.Menu(menubar, tearoff=0)
@@ -63,6 +65,12 @@ class HomeWindow(tk.Frame):
         root = tk.Tk()
         root.geometry("600x300")
         app = TWSMassAnomaliesCalculator(root)
+        root.mainloop()
+
+    def createtiff(self):
+        root = tk.Tk()
+        root.geometry("600x250")
+        app = TWStoTiff(root)
         root.mainloop()
 
 

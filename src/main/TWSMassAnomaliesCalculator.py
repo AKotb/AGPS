@@ -10,6 +10,9 @@ class TWSMassAnomaliesCalculator(tk.Frame):
         tk.Frame.__init__(self, master)
         self.master = master
         self.filtersdir = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), "resources")
+        self.selectedfilter='Gaussian'
+        self.selectedradius='0 km'
+        self.filtertorun='Calculating_TWS_mass_NDS_0km.exe'
         self.init_window()
 
     def init_window(self):
@@ -26,7 +29,7 @@ class TWSMassAnomaliesCalculator(tk.Frame):
         rvariable = tk.StringVar(self)
         rvariable.set(RADIUSOPTIONS[0])
 
-        rw = tk.OptionMenu(self, rvariable, *RADIUSOPTIONS)
+        rw = tk.OptionMenu(self, rvariable, *RADIUSOPTIONS, command=self.rwfunc)
         rw.place(x=300, y=45)
 
         FILTEROPTIONS = [
@@ -36,7 +39,7 @@ class TWSMassAnomaliesCalculator(tk.Frame):
         fvariable = tk.StringVar(self)
         fvariable.set(FILTEROPTIONS[0])
 
-        fw = tk.OptionMenu(self, fvariable, *FILTEROPTIONS)
+        fw = tk.OptionMenu(self, fvariable, *FILTEROPTIONS, command=self.fwfunc)
         fw.place(x=200, y=45)
 
         # Gaussian Radius
@@ -81,6 +84,12 @@ class TWSMassAnomaliesCalculator(tk.Frame):
         self.cancelbtn = tk.Button(self.master, text="Cancel", command=self.exit)
         self.cancelbtn.place(x=400, y=250)
 
+    def fwfunc(self, value):
+        self.selectedfilter=value
+
+    def rwfunc(self, value):
+        self.selectedradius=value
+
     def exit(self):
         self.master.destroy()
 
@@ -102,8 +111,33 @@ class TWSMassAnomaliesCalculator(tk.Frame):
     #     self.headlovenumber, self.taillovenumber = os.path.split(self.lovenumberfilepath)
 
     def calculatetwsmassanomalies(self):
+        print(self.selectedfilter)
+        print(self.selectedradius)
+        if (self.selectedfilter == 'Gaussian' and self.selectedradius == '0 km'):
+            self.filtertorun = "Calculating_TWS_mass_NDS_0km.exe"
+        if (self.selectedfilter == 'Gaussian' and self.selectedradius == '250 km'):
+            self.filtertorun = "Calculating_TWS_mass_NDS_250km.exe"
+        if (self.selectedfilter == 'Gaussian' and self.selectedradius == '500 km'):
+            self.filtertorun = "Calculating_TWS_mass_NDS_500km.exe"
+        if (self.selectedfilter == 'Gaussian' and self.selectedradius == '750 km'):
+            self.filtertorun = "Calculating_TWS_mass_NDS_750km.exe"
+        if (self.selectedfilter == 'Gaussian' and self.selectedradius == '990 km'):
+            self.filtertorun = "Calculating_TWS_mass_NDS_990km.exe"
+
+        if (self.selectedfilter == 'Destripping' and self.selectedradius == '0 km'):
+            self.filtertorun = "Calculating_TWS_mass_DS_0km.exe"
+        if (self.selectedfilter == 'Destripping' and self.selectedradius == '250 km'):
+            self.filtertorun = "Calculating_TWS_mass_DS_250km.exe"
+        if (self.selectedfilter == 'Destripping' and self.selectedradius == '500 km'):
+            self.filtertorun = "Calculating_TWS_mass_DS_500km.exe"
+        if (self.selectedfilter == 'Destripping' and self.selectedradius == '750 km'):
+            self.filtertorun = "Calculating_TWS_mass_DS_750km.exe"
+        if (self.selectedfilter == 'Destripping' and self.selectedradius == '990 km'):
+            self.filtertorun = "Calculating_TWS_mass_DS_990km.exe"
+
+        print(self.filtertorun)
         batfilepath = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), "resources\TWS_Mass_Anomalies_Calculation.bat")
-        #p = Popen([batfilepath, self.formatteddatapath, self.filtersdir, self.formatteddatapath, "Calculating_TWS_mass_NDS_250km.exe", self.headmonthtoprocess, self.formatteddatapath, self.tailmonthtoprocess,  self.headlovenumber, self.formatteddatapath, self.taillovenumber, "Calculating_TWS_mass_NDS_250km.exe"], stdout=PIPE, stderr=PIPE)
-        p = Popen([batfilepath, self.formatteddatapath, self.filtersdir, self.formatteddatapath, "Calculating_TWS_mass_NDS_250km.exe", self.headmonthtoprocess, self.formatteddatapath, self.tailmonthtoprocess, "Calculating_TWS_mass_NDS_250km.exe"], stdout=PIPE, stderr=PIPE)
+        drive, path = os.path.splitdrive(self.formatteddatapath)
+        p = Popen([batfilepath, drive, self.formatteddatapath, self.filtersdir, self.formatteddatapath, self.filtertorun, self.headmonthtoprocess, self.formatteddatapath, self.tailmonthtoprocess, self.filtertorun], stdout=PIPE, stderr=PIPE)
         p.communicate()
         p.wait()

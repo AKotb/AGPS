@@ -7,5 +7,6 @@
     <orderEntry type="jdk" jdkName="Python 2.7.14 (C:\Users\ahmed.kotb\AppData\Local\Continuum\anaconda2\python.exe)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ConvertShptoJSON" />
+    <orderEntry type="module" module-name="ConvertTWStoTIFF" />
   </component>
 </module>
